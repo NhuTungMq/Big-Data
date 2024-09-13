@@ -1,0 +1,3 @@
+"USA"	{"Gold":1324,"Silver":757,"Bronze":640}
+"CHN"	{"Gold":402,"Silver":417,"Bronze":328}
+"GER"	{"Gold":358,"Silver":278,"Bronze":414}
