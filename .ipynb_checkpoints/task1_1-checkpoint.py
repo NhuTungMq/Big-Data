@@ -2,19 +2,36 @@
  "cells": [
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 3,
    "id": "0e065f84-b7b9-4df5-9c52-ccca30621247",
    "metadata": {},
    "outputs": [],
    "source": [
-    "# Connect MongoDB with Python\n",
     "import pymongo\n",
-    "# Build Connection\n",
-    "connection = pymongo.MongoClient(\"localhost:27017\") \n",
-    "# Connect database\n",
+    "connection = pymongo.MongoClient(\"localhost:27017\")\n",
     "db = connection['Assignment1']\n",
-    "# Connect collection\n",
     "col = db['Olympic_Athletes']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "24ee087d-cfe7-481a-9d4a-c53e7e8753e7",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Olympic_Athletes']"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "db.list_collection_names()"
    ]
   },
   {
@@ -27,7 +44,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 8,
    "id": "9f5aa6f0-240c-409f-97c4-bd6b5ee643c3",
    "metadata": {
     "scrolled": true
@@ -20859,42 +20876,37 @@
     }
    ],
    "source": [
-    "# Initialize an empty list to accumulate the data for export to txt file\n",
-    "data = []\n",
+    "# Initialize an empty list to accumulate the entries for export to txt file\n",
+    "entries = []\n",
     "\n",
     "for document in col.find({\n",
     "    \"$and\": [\n",
     "        {\"edition\": {\"$regex\": \"Summer Olympics\"}},\n",
     "        {\"edition\": {\"$gte\": \"1980 Summer Olympics\", \"$lte\": \"2020 Summer Olympics\"}},\n",
     "        {\"medal\": {\"$in\": [\"Gold\",\"Bronze\",\"Silver\"]}}\n",
-    "    ]}, {\"edition\": 1, \"country_noc\": 1, \"event\": 1, \"athlete_id\": 1, \"medal\": 1, \"_id\": 0}):\n",
+    "    ]\n",
+    "}, {\"edition\": 1, \"country_noc\": 1, \"event\": 1, \"athlete_id\": 1, \"medal\": 1, \"_id\": 0}):\n",
     "    \n",
     "    # Print all required fields\n",
-    "    print(f\"{document['athlete_id']};{document['country_noc']};{document['edition'].split()[0]};{document['event']};{document['medal']}\")\n",
-    "    # Prepare each data for export\n",
-    "    df = f\"{document['athlete_id']};{document['country_noc']};{document['edition'].split()[0]};{document['event']};{document['medal']}\"\n",
-    "    data.append(df)"
+    "    print(\n",
+    "        f\"{document['athlete_id']};{document['country_noc']};{document['edition'].split()[0]};{document['event']};{document['medal']}\"\n",
+    "    )\n",
+    "    # Prepare each entry in the export\n",
+    "    entry = f\"{document['athlete_id']};{document['country_noc']};{document['edition'].split()[0]};{document['event']};{document['medal']}\"\n",
+    "    entries.append(entry)"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 10,
    "id": "08e7d394-34a0-4248-aab1-c9430397762e",
    "metadata": {},
    "outputs": [],
    "source": [
     "# Write the entries to the file using join\n",
-    "with open(\"athletes1.txt\", \"w\", encoding='utf-8') as file:\n",
-    "    file.write(\"\\n\".join(data))"
+    "with open(\"athletes.txt\", \"w\", encoding='utf-8') as file:\n",
+    "    file.write(\"\\n\".join(entries))"
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "c746eca9-62c2-4b24-9aa8-b1ebd263264b",
-   "metadata": {},
-   "outputs": [],
-   "source": []
   }
  ],
  "metadata": {
